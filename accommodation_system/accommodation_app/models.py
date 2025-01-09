@@ -58,7 +58,7 @@ class Post(BaseModel):
     caption = models.TextField(null=True)
 
     def __str__(self):
-        return f'Post_user_{self.user_post.id}'
+        return f'Post_user_{self.user.id}'
 
 class ImageOfPost(BaseModel):
     image = CloudinaryField('image', null=True, blank=True)
