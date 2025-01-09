@@ -1,0 +1,211 @@
+{% extends 'admin/base_site.html' %}
+
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('HE THONG TL') }}</a></div>
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" id="statsTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="user-tab" data-bs-toggle="tab" href="#user" role="tab" aria-controls="user" aria-selected="true">Thống kê theo người dùng</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="district-tab" data-bs-toggle="tab" href="#district" role="tab" aria-controls="district" aria-selected="false">Thống kê theo quận</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="monthly-tab" data-bs-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Thống kê theo tháng</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="yearly-tab" data-bs-toggle="tab" href="#yearly" role="tab" aria-controls="yearly" aria-selected="false">Thống kê theo năm</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="quarterly-tab" data-bs-toggle="tab" href="#quarterly" role="tab" aria-controls="quarterly" aria-selected="false">Thống kê theo quý</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="statsTabContent">
+                <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="user-tab">
+                    <h2>Thống kê theo người dùng</h2>
+                    <canvas id="userChart"></canvas>
+                </div>
+                <div class="tab-pane fade" id="district" role="tabpanel" aria-labelledby="district-tab">
+                    <h2>Thống kê theo quận</h2>
+                    <canvas id="districtChart"></canvas>
+                </div>
+                <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab">
+                    <h2>Thống kê theo tháng</h2>
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+                <div class="tab-pane fade" id="yearly" role="tabpanel" aria-labelledby="yearly-tab">
+                    <h2>Thống kê theo năm</h2>
+                    <canvas id="yearlyChart"></canvas>
+                </div>
+                <div class="tab-pane fade" id="quarterly" role="tabpanel" aria-labelledby="quarterly-tab">
+                    <h2>Thống kê theo quý</h2>
+                    <canvas id="quarterlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dữ liệu cho biểu đồ người dùng
+    var userStatsData = JSON.parse('{{ user_stats_json|escapejs }}');
+    var userLabels = userStatsData.map(function(item) {
+        return item.owner__username;
+    });
+    var userData = userStatsData.map(function(item) {
+        return item.accommodation_count;
+    });
+
+    var ctxUser = document.getElementById('userChart').getContext('2d');
+    var userChart = new Chart(ctxUser, {
+        type: 'bar',
+        data: {
+            labels: userLabels,
+            datasets: [{
+                label: 'Số lượng nhà trọ theo người dùng',
+                data: userData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Dữ liệu cho biểu đồ quận
+    var districtStatsData = JSON.parse('{{ district_stats_json|escapejs }}');
+    var districtLabels = districtStatsData.map(function(item) {
+        return item.district;
+    });
+    var districtData = districtStatsData.map(function(item) {
+        return item.accommodation_count;
+    });
+
+    var ctxDistrict = document.getElementById('districtChart').getContext('2d');
+    var districtChart = new Chart(ctxDistrict, {
+        type: 'doughnut',
+        data: {
+            labels: districtLabels,
+            datasets: [{
+                label: 'Số lượng nhà trọ theo quận',
+                data: districtData,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Dữ liệu cho biểu đồ theo tháng
+    var monthlyStatsData = JSON.parse('{{ monthly_stats_json|escapejs }}');
+    var monthlyLabels = monthlyStatsData.map(function(item) {
+        return item.month;
+    });
+    var monthlyData = monthlyStatsData.map(function(item) {
+        return item.accommodation_count;
+    });
+
+    var ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+    var monthlyChart = new Chart(ctxMonthly, {
+        type: 'line',
+        data: {
+            labels: monthlyLabels,
+            datasets: [{
+                label: 'Số lượng nhà trọ theo tháng',
+                data: monthlyData,
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Dữ liệu cho biểu đồ theo năm
+    var yearlyStatsData = JSON.parse('{{ yearly_stats_json|escapejs }}');
+    var yearlyLabels = yearlyStatsData.map(function(item) {
+        return item.year;
+    });
+    var yearlyData = yearlyStatsData.map(function(item) {
+        return item.accommodation_count;
+    });
+
+    var ctxYearly = document.getElementById('yearlyChart').getContext('2d');
+    var yearlyChart = new Chart(ctxYearly, {
+        type: 'bar',
+        data: {
+            labels: yearlyLabels,
+            datasets: [{
+                label: 'Số lượng nhà trọ theo năm',
+                data: yearlyData,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Dữ liệu cho biểu đồ theo quý
+    var quarterlyStatsData = JSON.parse('{{ quarterly_stats_json|escapejs }}');
+    var quarterlyLabels = quarterlyStatsData.map(function(item) {
+        return 'Quý ' + item.quarter;
+    });
+    var quarterlyData = quarterlyStatsData.map(function(item) {
+        return item.accommodation_count;
+    });
+
+    var ctxQuarterly = document.getElementById('quarterlyChart').getContext('2d');
+    var quarterlyChart = new Chart(ctxQuarterly, {
+        type: 'pie',
+        data: {
+            labels: quarterlyLabels,
+            datasets: [{
+                label: 'Số lượng nhà trọ theo quý',
+                data: quarterlyData,
+                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(153, 102, 255, 0.2)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 159, 64, 1)', 'rgba(153, 102, 255, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>
+
+{% endblock %}
