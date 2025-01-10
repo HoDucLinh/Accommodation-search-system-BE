@@ -49,7 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accommodation_app.apps.AccommodationAppConfig',
-    'cloudinary'
+    'cloudinary',
+    'rest_framework',
+    'oauth2_provider',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -61,6 +64,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'oauth2_provider.contrib.rest_framework.OAuth2Authentication',)
+}
 
 ROOT_URLCONF = 'accommodation_system.urls'
 
