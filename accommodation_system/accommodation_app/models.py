@@ -27,7 +27,7 @@ class Interaction(BaseModel):
 
 
 class User(AbstractUser):
-    avatar = CloudinaryField('avatar')
+    avatar = CloudinaryField('avatar', null = False)
     role = models.CharField(max_length=6, choices=Role.choices, null=False)
 
 class Accommodation(BaseModel):
