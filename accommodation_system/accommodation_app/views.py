@@ -19,9 +19,12 @@ class AccommodationViewSet(viewsets.ModelViewSet):
             return  [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView, generics.RetrieveAPIView, generics.ListAPIView):
-    queryset = User.objects.filter(is_active = True)
+    queryset = User.objects.filter(is_active=True)
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -29,6 +32,9 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView, generics.RetrieveAPI
         if self.action == 'retrieve':
             return [permissions.IsAuthenticated()]
         return [permissions.AllowAny()]
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -53,4 +59,7 @@ class PostViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except Post.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 

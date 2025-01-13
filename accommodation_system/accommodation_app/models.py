@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from cloudinary.models import CloudinaryField
 from django.db import models
@@ -30,6 +31,8 @@ class User(AbstractUser):
     avatar = CloudinaryField('avatar', null = False)
     role = models.CharField(max_length=6, choices=Role.choices, null=False)
 
+
+
 class Accommodation(BaseModel):
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='accommodation' , null=True)
     address = models.CharField(max_length=255)
@@ -52,6 +55,12 @@ class ImageOfAccommodation(BaseModel):
     def __str__(self):
         return f'Image_of_{self.accommodation_id}'
 
+    def get_image_url(self):
+        # Nếu chỉ lưu phần path của ảnh, ta sẽ gắn domain của Cloudinary vào
+        if self.image:
+            return f"https://res.cloudinary.com/dzwsdpjgi/image/upload/{self.image}"
+        return None
+
 class Post(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_post')
     content = models.TextField()
@@ -66,6 +75,12 @@ class ImageOfPost(BaseModel):
 
     def __str__(self):
         return f'Image_of_{self.post_id}'
+
+    def get_image_url(self):
+        # Nếu chỉ lưu phần path của ảnh, ta sẽ gắn domain của Cloudinary vào
+        if self.image:
+            return f"https://res.cloudinary.com/dzwsdpjgi/image/upload/{self.image}"
+        return None
 
 class CommentPost(Interaction):
     content = models.TextField()

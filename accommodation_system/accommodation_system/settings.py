@@ -39,6 +39,8 @@ cloudinary.config(
 )
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
