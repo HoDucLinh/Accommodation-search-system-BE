@@ -30,6 +30,12 @@ class Interaction(BaseModel):
 class User(AbstractUser):
     avatar = CloudinaryField('avatar', null = False)
     role = models.CharField(max_length=6, choices=Role.choices, null=False)
+    password = models.CharField(max_length=128)
+
+    def save(self, *args, **kwargs):
+        if self.password:
+            self.set_password(self.password)
+        super().save(*args, **kwargs)
 
 
 

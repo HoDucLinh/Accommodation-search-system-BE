@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'username', 'password', 'email', 'avatar_url']
+        fields = ['id', 'first_name', 'last_name', 'username', 'password', 'email', 'avatar', 'avatar_url']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -25,6 +25,13 @@ class UserSerializer(serializers.ModelSerializer):
         if obj.avatar and request:
             return request.build_absolute_uri(obj.avatar.url)
         return None
+
+    def __init__(self, *args, **kwargs):
+        super(UserSerializer, self).__init__(*args, **kwargs)
+        if self.context.get('action') == 'create':
+            self.fields.pop('avatar_url')
+        else:
+            self.fields.pop('avatar') # ẩn field avatar
 
 
 class ImageAccommodationSerializer(serializers.ModelSerializer):

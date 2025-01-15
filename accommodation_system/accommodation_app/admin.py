@@ -72,7 +72,7 @@ admin_site = AccommodationAppAdminSite('myadmin')
 
 admin_site.register(Accommodation , AccommodationAdmin)
 admin_site.register(Post)
-admin_site.register(User, UserAdmin)
+admin_site.register(User)
 admin_site.register(ImageOfPost)
 admin_site.register(ImageOfAccommodation)
 admin_site.register(CommentPost)
