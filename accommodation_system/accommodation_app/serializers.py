@@ -2,6 +2,8 @@ from rest_framework.serializers import ModelSerializer
 from .models import *
 import cloudinary.uploader
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,24 +16,17 @@ class UserSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
-    def create(self, validated_data):
-        u = User(**validated_data)
-        u.set_password(validated_data['password'])
-        u.save()
-        return u
+    # def create(self, validated_data):
+    #     password = validated_data.pop('password')  # Lấy và xóa mật khẩu khỏi validated_data
+    #     user = User(**validated_data)  # Tạo đối tượng User mà chưa có mật khẩu
+    #     user.set_password(password)  # Băm mật khẩu trước khi lưu
+    #     user.save()  # Lưu người dùng với mật khẩu đã băm
+    #     return user
 
     def get_avatar_url(self, obj):
-        request = self.context.get('request')
-        if obj.avatar and request:
-            return request.build_absolute_uri(obj.avatar.url)
+        if obj.avatar:
+            return obj.get_avatar_url()
         return None
-
-    def __init__(self, *args, **kwargs):
-        super(UserSerializer, self).__init__(*args, **kwargs)
-        if self.context.get('action') == 'create':
-            self.fields.pop('avatar_url')
-        else:
-            self.fields.pop('avatar') # ẩn field avatar
 
 
 class ImageAccommodationSerializer(serializers.ModelSerializer):

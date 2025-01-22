@@ -30,12 +30,16 @@ class Interaction(BaseModel):
 class User(AbstractUser):
     avatar = CloudinaryField('avatar', null = False)
     role = models.CharField(max_length=6, choices=Role.choices, null=False)
-    password = models.CharField(max_length=128)
 
     def save(self, *args, **kwargs):
-        if self.password:
-            self.set_password(self.password)
+        if self.password:  # Kiểm tra xem mật khẩu có tồn tại không
+            self.set_password(self.password)  # Băm mật khẩu trước khi lưu
         super().save(*args, **kwargs)
+
+    def get_avatar_url(self):
+        if self.avatar:
+            return f"https://res.cloudinary.com/dzwsdpjgi/image/upload/{self.avatar}"
+        return None
 
 
 
@@ -71,6 +75,7 @@ class Post(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_post')
     content = models.TextField()
     caption = models.TextField(null=True)
+    is_approved = models.BooleanField(default=False, choices=[(True, 'Approved'), (False, 'Not Approved')])
 
     def __str__(self):
         return f'Post_user_{self.user.id}'
