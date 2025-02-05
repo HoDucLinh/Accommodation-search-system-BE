@@ -40,7 +40,7 @@ class AccommodationViewSet(viewsets.ViewSet, generics.ListAPIView, generics.Dest
 
         # Lọc theo số người
         if number_of_people:
-            query = query.filter(number_of_people__gte=number_of_people)
+            query = query.filter(number_of_people=number_of_people)
 
         # Lọc theo giá
         if min_price and max_price:
@@ -66,14 +66,17 @@ class AccommodationViewSet(viewsets.ViewSet, generics.ListAPIView, generics.Dest
 
     @action(methods=['GET'], detail=False, url_path='search')
     def search_accommodation(self, request):
-        try:
-            accommodations = self.get_queryset()
-            return Response(data=AccommodationSerializer(accommodations, many=True, context={'request': request}).data,
-                            status=status.HTTP_200_OK)
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            return Response({"Error": "Server error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        queryset = self.get_queryset()
 
+        # Áp dụng phân trang
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = AccommodationSerializer(page, many=True, context={'request': request})
+            return self.get_paginated_response(serializer.data)
+
+        serializer = AccommodationSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
     @action(methods=['POST'], detail=False, url_path='create')
     def create_accommodation(self, request):
         try:
@@ -406,13 +409,19 @@ class PostViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIVi
             if not query:
                 return Response({"Error": "Search query is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Tìm kiếm theo tên người dùng hoặc nội dung bài đăng
             posts = self.queryset.filter(
                 Q(content__icontains=query) | Q(user__username__icontains=query)
             ).distinct()
 
+            # Áp dụng phân trang mặc định từ settings.py
+            page = self.paginate_queryset(posts)
+            if page is not None:
+                serializer = PostSerializer(page, many=True, context={'request': request})
+                return self.get_paginated_response(serializer.data)
+
             serializer = PostSerializer(posts, many=True, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         except Exception as e:
             print(f"Error: {str(e)}")
             return Response({"Error": "Server error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

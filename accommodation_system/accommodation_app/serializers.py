@@ -12,12 +12,21 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'username', 'password', 'email', 'avatar', 'avatar_url']
+        fields = ['id', 'first_name', 'last_name', 'username', 'password', 'email', 'avatar', 'avatar_url', 'role']
         extra_kwargs = {
             'password': {'write_only': True}
         }
 
+    def create(self, validated_data):
+        password = validated_data.pop('password')  # Lấy và xóa mật khẩu khỏi validated_data
+        user = User(**validated_data)  # Tạo đối tượng User mà chưa có mật khẩu
+        user.set_password(password)  # Băm mật khẩu trước khi lưu
+        user.save()  # Lưu người dùng với mật khẩu đã băm
+        return user
+
     def get_avatar_url(self, obj):
+        request = self.context.get('request')
+        # Sử dụng URL đầy đủ từ phương thức model nếu không có request
         if obj.avatar:
             return obj.get_avatar_url()
         return None
