@@ -10,6 +10,7 @@ router = DefaultRouter()
 router.register('accommodations' , views.AccommodationViewSet)
 router.register('user', UserViewSet)
 router.register('post',PostViewSet)
+router.register('notification',views.NotificationsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
