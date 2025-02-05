@@ -1,11 +1,7 @@
-from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
-from rest_framework_recursive.fields import RecursiveField
-
 from .models import *
 from rest_framework import serializers
-
-
+from rest_framework.fields import SerializerMethodField
 
 class UserSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
@@ -16,13 +12,6 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
-
-    def create(self, validated_data):
-        password = validated_data.pop('password')  # Lấy và xóa mật khẩu khỏi validated_data
-        user = User(**validated_data)  # Tạo đối tượng User mà chưa có mật khẩu
-        user.set_password(password)  # Băm mật khẩu trước khi lưu
-        user.save()  # Lưu người dùng với mật khẩu đã băm
-        return user
 
     def get_avatar_url(self, obj):
         request = self.context.get('request')
@@ -48,13 +37,12 @@ class ImageAccommodationSerializer(serializers.ModelSerializer):
         return None
 
 
-
 class AccommodationSerializer(ModelSerializer):
     accommodation_images = ImageAccommodationSerializer(many=True, read_only=True, source='accommodation_image')
 
     class Meta:
         model = Accommodation
-        fields = ['id', 'owner', 'address', 'created_date', 'price', 'description', 'is_rented', 'accommodation_images']
+        fields = '__all__'
 
 
 class ImageOfPostSerializer(serializers.ModelSerializer):
@@ -70,20 +58,49 @@ class ImageOfPostSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.image.url)  # Tạo URL đầy đủ nếu có image
         return None  # Hoặc có thể trả về URL mặc định nếu không có hình ảnh
 
+class RecursiveField(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+class CommentPostSerializer(ModelSerializer):
+    reply_comment = serializers.SerializerMethodField()  # Lấy danh sách reply
+    user_comment = serializers.PrimaryKeyRelatedField(source='user.id', read_only=True)  # Trả về id của người dùng bình luận
+    comment_count = serializers.SerializerMethodField()  # Đếm số lượng reply
+
+    class Meta:
+        model = CommentPost
+        fields = ['id', 'user_comment', 'post', 'content', 'parent_comment', 'created_date', 'reply_comment', 'comment_count']
+
+    def get_reply_comment(self, obj):
+        replies = obj.reply_comment.all()  # Lấy danh sách reply từ related_name
+        return CommentPostSerializer(replies, many=True).data  # Serialize danh sách reply
+
+    def get_comment_count(self, obj):
+        return obj.reply_comment.count()  # Đếm số lượng reply
+
 class PostSerializer(serializers.ModelSerializer):
     post_images = ImageOfPostSerializer(many=True, read_only=True, source='post_image')
+    comment_count = serializers.SerializerMethodField()  # Đếm số lượng bình luận gốc
+    comments = serializers.SerializerMethodField()  # Lấy danh sách bình luận gốc
 
     class Meta:
         model = Post
-        fields = ['id', 'caption', 'content', 'created_date', 'user_id', 'post_images']
+        fields = ['id', 'caption', 'content', 'created_date', 'user_id', 'post_images', 'comment_count', 'comments']
+
+    def get_comment_count(self, obj):
+        return obj.post_comment.filter(parent_comment__isnull=True).count()  # Đếm số lượng bình luận gốc
+
+    def get_comments(self, obj):
+        comments = obj.post_comment.filter(parent_comment__isnull=True)  # Lấy danh sách bình luận gốc
+        return CommentPostSerializer(comments, many=True).data  # Serialize danh sách bình luận
 
 
-class CommentPostSerializer(ModelSerializer):
-    reply_comment = RecursiveField(many=True)
-    user_comment = UserSerializer(read_only=True)
+class FollowSerializer(ModelSerializer):
     class Meta:
-        model = CommentPost
-        fields = ['id', 'user', 'post', 'content', 'parent_comment', 'created_at', 'reply_comment']
+        model = Follow
+        fields = '__all__'
+
 
 class SenderSerializer(ModelSerializer):
     avatar_user = SerializerMethodField()
@@ -102,3 +119,6 @@ class NotificationSerializer(ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
+
+
+
