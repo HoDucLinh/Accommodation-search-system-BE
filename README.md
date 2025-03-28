@@ -56,31 +56,31 @@ Mục tiêu của dự án là tạo ra một hệ thống **đáng tin cậy**,
 Tải mã nguồn về máy:
 ```bash
 git clone https://github.com/HoDucLinh/Accommodation-search-system-BE.git
-
+```
 ### 2️⃣ Di Chuyển Vào Thư Mục Dự Án
 ```bash
 cd Accommodation-search-system-BE
-
+```
 ### 3️⃣ Tạo Môi Trường Ảo
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate
-
+```
 ### 4️⃣ Cài Đặt Các Gói Phụ Thuộc
 ```bash
 pip install -r requirements.txt
-
+```
 ### 5️⃣ Cấu Hình Cơ Sở Dữ Liệu
 Đảm bảo MySQL đang chạy và đã tạo Database với tên accommodation_db.
 Sau đó chạy lệnh dưới đây là thực hiện tạo bảng
 ```bash
 python manage.py migrate
-
+```
 ### 6️⃣ Khởi chạy ứng dụng
 ```bash
 python manage.py runserver
-
+```
 📂 Cấu Trúc Thư Mục
 
 Accommodation-search-system-BE/
