@@ -80,7 +80,7 @@ python manage.py migrate
 ### 6️⃣ Khởi chạy ứng dụng
 ```bash
 python manage.py runserver
-```
+
 
 📂 Cấu Trúc Thư Mục
 
