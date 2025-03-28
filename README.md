@@ -57,7 +57,7 @@ Tải mã nguồn về máy:
 ```bash
 git clone https://github.com/HoDucLinh/Accommodation-search-system-BE.git
 
-2️⃣ Di Chuyển Vào Thư Mục Dự Án
+### 2️⃣ Di Chuyển Vào Thư Mục Dự Án
 ```bash
 cd Accommodation-search-system-BE
 
