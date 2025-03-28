@@ -81,7 +81,7 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 
-
+```
 ### 📂 Cấu Trúc Thư Mục
 
 Accommodation-search-system-BE/
@@ -107,7 +107,7 @@ Accommodation-search-system-BE/
 ├── 📄 manage.py             # 🛠 Công cụ quản lý Django
 ├── 📄 requirements.txt      # 📦 Danh sách dependencies
 └── 📄 README.md             # 📖 File hướng dẫn này
-
+```
 ### 📡 Danh Sách API
 Dưới đây là các endpoint chính:
 
