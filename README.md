@@ -83,7 +83,7 @@ python manage.py runserver
 
 ```
 ### 📂 Cấu Trúc Thư Mục
-
+```
 Accommodation-search-system-BE/
 ├── 📁 accommodation_app/    # Ứng dụng chính của dự án
 │   ├── 📁 migrations/       # 🗄 File migration cơ sở dữ liệu
