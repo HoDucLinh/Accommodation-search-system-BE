@@ -82,7 +82,7 @@ python manage.py migrate
 python manage.py runserver
 
 
-📂 Cấu Trúc Thư Mục
+### 📂 Cấu Trúc Thư Mục
 
 Accommodation-search-system-BE/
 ├── 📁 accommodation_app/    # Ứng dụng chính của dự án
@@ -108,17 +108,17 @@ Accommodation-search-system-BE/
 ├── 📄 requirements.txt      # 📦 Danh sách dependencies
 └── 📄 README.md             # 📖 File hướng dẫn này
 
-📡 Danh Sách API
+### 📡 Danh Sách API
 Dưới đây là các endpoint chính:
 
 Phương Thức	          Endpoint	                Mô Tả
-GET	          /api/accommodations/	            📋 Lấy danh sách tất cả chỗ ở
-POST	        /api/accommodations/	            ➕ Thêm một chỗ ở mới
+GET	          /api/accommodations/	                📋 Lấy danh sách tất cả chỗ ở
+POST	        /api/accommodations/	                ➕ Thêm một chỗ ở mới
 GET	          /api/accommodations/<id>/	        🔎 Xem chi tiết một chỗ ở
 PUT	          /api/accommodations/<id>/	        ✏️ Cập nhật thông tin chỗ ở
-DELETE	      /api/accommodations/<id>/	        🗑 Xóa một chỗ ở
-POST	        /api/users/register/	            👤 Đăng ký người dùng mới
-GET	          /o/authorize/	                    🔑 Yêu cầu xác thực OAuth2
+DELETE	      /api/accommodations/<id>/	              🗑 Xóa một chỗ ở
+POST	        /api/users/register/	                👤 Đăng ký người dùng mới
+GET	          /o/authorize/	                        🔑 Yêu cầu xác thực OAuth2
 POST	        /o/token/	                        🔐 Lấy access token OAuth2
 
 📧 Liên Hệ
