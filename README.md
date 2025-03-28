@@ -81,6 +81,7 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
+
 📂 Cấu Trúc Thư Mục
 
 Accommodation-search-system-BE/
@@ -110,22 +111,22 @@ Accommodation-search-system-BE/
 📡 Danh Sách API
 Dưới đây là các endpoint chính:
 
-Phương Thức	        Endpoint	          Mô Tả
-GET	        /api/accommodations/	      📋 Lấy danh sách tất cả chỗ ở
-POST	      /api/accommodations/	      ➕ Thêm một chỗ ở mới
-GET	        /api/accommodations/<id>/	  🔎 Xem chi tiết một chỗ ở
-PUT	        /api/accommodations/<id>/	  ✏️ Cập nhật thông tin chỗ ở
-DELETE	    /api/accommodations/<id>/	  🗑 Xóa một chỗ ở
-POST	      /api/users/register/	      👤 Đăng ký người dùng mới
-GET	        /o/authorize/	              🔑 Yêu cầu xác thực OAuth2
-POST	      /o/token/	                  🔐 Lấy access token OAuth2
+Phương Thức	          Endpoint	                Mô Tả
+GET	          /api/accommodations/	            📋 Lấy danh sách tất cả chỗ ở
+POST	        /api/accommodations/	            ➕ Thêm một chỗ ở mới
+GET	          /api/accommodations/<id>/	        🔎 Xem chi tiết một chỗ ở
+PUT	          /api/accommodations/<id>/	        ✏️ Cập nhật thông tin chỗ ở
+DELETE	      /api/accommodations/<id>/	        🗑 Xóa một chỗ ở
+POST	        /api/users/register/	            👤 Đăng ký người dùng mới
+GET	          /o/authorize/	                    🔑 Yêu cầu xác thực OAuth2
+POST	        /o/token/	                        🔐 Lấy access token OAuth2
 
 📧 Liên Hệ
 Nếu bạn có thắc mắc, ý tưởng hoặc muốn hợp tác:
 
-👨‍💻 Tác Giả: Hồ Đức Linh
-🌐 GitHub: HoDucLinh
-✉️ Email: hoduclinh080204@gmail.com
+- 👨‍💻 Tác Giả: Hồ Đức Linh
+- 🌐 GitHub: HoDucLinh
+- ✉️ Email: hoduclinh080204@gmail.com
 
 ### Ghi Chú:
 -  ⚠ **Cảnh Báo**: 🚫 Mong quý người đọc không thực hiện push code mới vào nhánh main.
