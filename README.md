@@ -116,7 +116,7 @@ GET	          /api/accommodations/	                📋 Lấy danh sách tất c
 POST	        /api/accommodations/	                ➕ Thêm một chỗ ở mới
 GET	          /api/accommodations/<id>/	        🔎 Xem chi tiết một chỗ ở
 PUT	          /api/accommodations/<id>/	        ✏️ Cập nhật thông tin chỗ ở
-DELETE	      /api/accommodations/<id>/	              🗑 Xóa một chỗ ở
+DELETE	      /api/accommodations/<id>/	                🗑 Xóa một chỗ ở
 POST	        /api/users/register/	                👤 Đăng ký người dùng mới
 GET	          /o/authorize/	                        🔑 Yêu cầu xác thực OAuth2
 POST	        /o/token/	                        🔐 Lấy access token OAuth2
