@@ -109,6 +109,7 @@ Accommodation-search-system-BE/
 └── 📄 README.md             # 📖 File hướng dẫn này
 ```
 ### 📡 Danh Sách API
+```
 Dưới đây là các endpoint chính:
 
 Phương Thức	          Endpoint	                Mô Tả
